@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Usage Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="droplet">💧</div>
+    <div>
+      <h1>Water Usage Analyzer</h1>
+      <p class="subtitle">Log your daily usage. Get leak warnings, trends, and real conservation advice.</p>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash">{% for m in messages %}<p>⚠ {{ m }}</p>{% endfor %}</div>
+    {% endif %}
+  {% endwith %}
+
+  <form action="/analyze" method="POST" class="sheet">
+
+    <section class="block">
+      <div class="block-head"><span class="ripple">〰</span><h2>1. Household Details</h2></div>
+      <div class="three-col">
+        <label class="field">
+          <span>Household Size (people)</span>
+          <input type="number" name="household_size" placeholder="e.g. 4" min="1" required>
+        </label>
+        <label class="field">
+          <span>Daily Threshold (Litres)</span>
+          <input type="number" name="daily_threshold" placeholder="e.g. 600" required>
+        </label>
+        <label class="field">
+          <span>Benchmark (L/person/day)</span>
+          <input type="number" name="benchmark_lpcd" value="{{ default_benchmark }}">
+        </label>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-head"><span class="ripple">〰</span><h2>2. Paste Your Daily Usage Log</h2></div>
+      <p class="hint">
+        One reading per line: <code>YYYY-MM-DD, liters_used</code><br>
+        <span class="hint-sub">Example: <code>2026-08-01, 450</code></span>
+      </p>
+      <textarea name="usage_log" rows="14" placeholder="2026-08-01, 420
+2026-08-02, 55
+2026-08-03, 480
+2026-08-04, 60
+2026-08-05, 510
+...">{{ previous_text or '' }}</textarea>
+    </section>
+
+    <button type="submit" class="submit-btn">Analyze Usage →</button>
+  </form>
+
+  <footer class="foot-note">Built with Python (Flask) + trend math + rule-based recommendations.</footer>
+</div>
+
+</body>
+</html>

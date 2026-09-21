@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Usage Report — Water Usage Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="droplet">📊</div>
+    <div>
+      <h1>Usage Report</h1>
+      <p class="subtitle">{{ household_size }} people · {{ report.records | length }} days logged · Threshold {{ daily_threshold }}L/day</p>
+    </div>
+  </header>
+
+  <a href="/" class="back-link">← Analyze another log</a>
+
+  <!-- ============ LEAK ESTIMATION ============ -->
+  <section class="block {% if report.leak_estimation.possible_leak %}block-warn{% endif %}">
+    <div class="block-head"><span class="ripple">🚰</span><h2>Leak Estimation</h2></div>
+    {% if report.leak_estimation.possible_leak %}
+      <p class="alert-text">⚠ Possible leak detected — your lowest-usage day still shows <strong>{{ report.leak_estimation.baseline_liters }}L</strong> used.</p>
+      <div class="stat-row">
+        <div class="stat-card"><span class="stat-label">Estimated Daily Leak</span><span class="stat-value">{{ report.leak_estimation.estimated_daily_leak }} L</span></div>
+        <div class="stat-card"><span class="stat-label">Projected Monthly Waste</span><span class="stat-value">{{ report.leak_estimation.estimated_monthly_waste }} L</span></div>
+      </div>
+    {% else %}
+      <p class="hint">No signs of a continuous leak — your lowest-usage day ({{ report.leak_estimation.baseline_liters }}L) is within a normal range. ✓</p>
+    {% endif %}
+  </section>
+
+  <!-- ============ DAILY TREND ANALYSIS ============ -->
+  <section class="block">
+    <div class="block-head"><span class="ripple">📈</span><h2>Daily Trend Analysis</h2></div>
+    <p class="hint">Trend: <span class="pill pill-{{ report.daily_trend.trend | lower }}">{{ report.daily_trend.trend }}</span> ({{ report.daily_trend.pct_change }}% change, first half vs second half)</p>
+    <div class="bars">
+      {% for point in report.daily_trend.moving_average %}
+      <div class="bar-row">
+        <span class="bar-label">{{ point.date }}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: {{ (point.avg / (report.daily_trend.moving_average | map(attribute='avg') | max) * 100) | round(1) }}%"></div>
+        </div>
+        <span class="bar-value">{{ point.avg }} L</span>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ============ USAGE BENCHMARKING ============ -->
+  <section class="block">
+    <div class="block-head"><span class="ripple">⚖</span><h2>Usage Benchmarking</h2></div>
+    <div class="stat-row">
+      <div class="stat-card"><span class="stat-label">Your Avg (L/person/day)</span><span class="stat-value">{{ report.benchmarking.avg_lpcd }}</span></div>
+      <div class="stat-card"><span class="stat-label">Benchmark</span><span class="stat-value">{{ report.benchmarking.benchmark_lpcd }}</span></div>
+      <div class="stat-card"><span class="stat-label">Difference</span><span class="stat-value">{{ report.benchmarking.pct_diff }}%</span></div>
+    </div>
+    <p class="hint">Status: <span class="pill pill-{{ report.benchmarking.status | lower | replace(' ', '_') }}">{{ report.benchmarking.status }}</span></p>
+  </section>
+
+  <!-- ============ THRESHOLD ALERTS ============ -->
+  <section class="block">
+    <div class="block-head"><span class="ripple">🔔</span><h2>Threshold Alerts</h2></div>
+    {% if report.threshold_alerts %}
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Usage</th><th>Excess Over Limit</th></tr></thead>
+        <tbody>
+          {% for a in report.threshold_alerts %}
+          <tr><td>{{ a.date }}</td><td>{{ a.liters }} L</td><td class="excess">+{{ a.excess }} L</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="hint">No days exceeded your threshold. ✓</p>
+    {% endif %}
+  </section>
+
+  <!-- ============ CONSERVATION TIPS ============ -->
+  <section class="block block-tips">
+    <div class="block-head"><span class="ripple">🌱</span><h2>Conservation Tips</h2></div>
+    <ul class="tip-list">
+      {% for tip in report.conservation_tips %}
+      <li>{{ tip }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- ============ RAW LOG ============ -->
+  <section class="block">
+    <div class="block-head"><span class="ripple">📋</span><h2>Logged Readings</h2></div>
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Liters Used</th></tr></thead>
+      <tbody>
+        {% for r in report.records %}
+        <tr><td>{{ r.date }}</td><td>{{ r.liters }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="foot-note">Built with Python (Flask) + trend math + rule-based recommendations.</footer>
+</div>
+
+</body>
+</html>

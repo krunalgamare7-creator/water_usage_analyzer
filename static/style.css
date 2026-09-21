@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Water Usage Analyzer — visual theme
+   Concept: deep water / conservation dashboard. Ocean-teal background,
+   aqua accents, coral for alerts, soft green for positive/eco tips.
+   ========================================================================== */
+
+:root {
+  --ocean:      #0E2A32;
+  --panel:      #123845;
+  --panel-2:    #164555;
+  --text:       #E7F3F3;
+  --text-soft:  #8FB4BA;
+  --aqua:       #35C2C1;
+  --aqua-bg:    #113B3C;
+  --cyan:       #6FE7DD;
+  --coral:      #FF6F59;
+  --coral-bg:   #3A2320;
+  --green:      #6FCF97;
+  --green-bg:   #1C3A2A;
+  --amber:      #F2C14E;
+  --amber-bg:   #3A331A;
+  --line:       #1E4A57;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ocean);
+  background-image: radial-gradient(circle at 15% 0%, #143d47 0%, var(--ocean) 55%);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.55;
+}
+
+.page { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+/* ---------- Masthead ---------- */
+.masthead { display: flex; align-items: center; gap: 18px; margin-bottom: 28px; }
+.droplet {
+  flex-shrink: 0;
+  width: 56px; height: 56px;
+  border: 3px solid var(--aqua);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  background: var(--aqua-bg);
+}
+h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 32px;
+  margin: 0 0 4px;
+  color: var(--cyan);
+}
+.subtitle { margin: 0; color: var(--text-soft); font-size: 14.5px; }
+
+.back-link { display: inline-block; margin-bottom: 24px; color: var(--aqua); text-decoration: none; font-weight: 600; font-size: 14px; }
+.back-link:hover { text-decoration: underline; }
+
+/* ---------- Flash ---------- */
+.flash { background: var(--coral-bg); border-left: 4px solid var(--coral); padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; color: #FFB3A7; font-size: 14px; }
+.flash p { margin: 2px 0; }
+
+/* ---------- Blocks ---------- */
+.sheet { display: flex; flex-direction: column; gap: 24px; }
+.block { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 24px 26px; margin-bottom: 24px; }
+.block-warn { border-color: var(--coral); box-shadow: 0 0 0 1px rgba(255,111,89,0.15) inset; }
+.block-tips { background: linear-gradient(180deg, var(--panel), var(--green-bg) 400%); }
+.block-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.ripple { font-size: 18px; color: var(--aqua); }
+.block h2 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; margin: 0; color: var(--text); }
+
+.hint { font-size: 14px; color: var(--text-soft); margin: 0 0 12px; }
+.hint-sub { font-size: 12.5px; }
+.hint code, .hint-sub code { background: var(--panel-2); border: 1px solid var(--line); padding: 1px 5px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--cyan); }
+.alert-text { color: #FFB3A7; font-size: 14.5px; margin: 0 0 14px; }
+
+/* ---------- Form fields ---------- */
+.three-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--text-soft); }
+.field input, textarea {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+}
+textarea { width: 100%; resize: vertical; }
+.field input:focus, textarea:focus { outline: 2px solid var(--aqua); outline-offset: 1px; }
+
+.submit-btn {
+  align-self: flex-start;
+  background: var(--aqua);
+  color: #0E2A32;
+  border: none;
+  padding: 13px 26px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+.submit-btn:hover { background: var(--cyan); transform: translateY(-1px); }
+
+/* ---------- Stat cards ---------- */
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 8px; }
+.stat-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.stat-label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-soft); }
+.stat-value { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; color: var(--cyan); }
+
+/* ---------- Bars ---------- */
+.bars { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: 100px 1fr 70px; align-items: center; gap: 10px; }
+.bar-label { font-size: 12px; color: var(--text-soft); font-family: 'JetBrains Mono', monospace; }
+.bar-track { background: var(--panel-2); border-radius: 4px; height: 12px; overflow: hidden; border: 1px solid var(--line); }
+.bar-fill { height: 100%; background: var(--aqua); border-radius: 4px 0 0 4px; }
+.bar-value { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-soft); text-align: right; }
+
+/* ---------- Pills ---------- */
+.pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.pill-increasing { background: var(--coral-bg); color: var(--coral); }
+.pill-decreasing { background: var(--green-bg); color: var(--green); }
+.pill-stable { background: var(--panel-2); color: var(--text-soft); }
+.pill-efficient { background: var(--green-bg); color: var(--green); }
+.pill-normal { background: var(--panel-2); color: var(--aqua); }
+.pill-high_usage { background: var(--coral-bg); color: var(--coral); }
+
+/* ---------- Tables ---------- */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data-table th { text-align: left; padding: 9px 10px; border-bottom: 2px solid var(--line); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-soft); }
+.data-table td { padding: 10px; border-bottom: 1px solid var(--line); }
+.data-table tr:hover { background: rgba(53, 194, 193, 0.06); }
+.excess { color: var(--coral); font-family: 'JetBrains Mono', monospace; }
+
+/* ---------- Tips ---------- */
+.tip-list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+.tip-list li { font-size: 14px; color: var(--text); }
+
+/* ---------- Footer ---------- */
+.foot-note { text-align: center; color: var(--text-soft); font-size: 12px; margin-top: 40px; }
+
+@media (max-width: 600px) {
+  .three-col { grid-template-columns: 1fr; }
+  .bar-row { grid-template-columns: 80px 1fr; }
+  .bar-value { grid-column: 2; text-align: left; }
+  h1 { font-size: 24px; }
+}
